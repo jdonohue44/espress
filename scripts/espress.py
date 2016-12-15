@@ -56,11 +56,78 @@ message['To'] = ", ".join(mailing_list)
 message['Subject'] = 'Good Morning from Espress, Today is ' + time.strftime("%d/%m/%Y")
 
 f1 = open('../html/template1.html','r')
-f2 = open('../html/template2.html','r')
 html = f1.read()
 for a in aid:
 	html += "<a href ='" + aid[a]['link'] + "'</a>" + aid[a]['title'] + "<br /><br />"
-html += f2.read()
+html += """
+</td>
+</tr>
+</table>
+</td>
+<td style="font-size: 0; line-height: 0;" width="20">
+&nbsp;
+</td>
+<td width="260" valign="top">
+<table border="0" cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td>
+<img src="http://placehold.it/170x129" alt="" width="100%" height="140" style="display: block;" />
+</td>
+</tr>
+<tr>
+<td style="padding: 25px 0 0 0; font-family: Arial, sans-serif; font-size: 16px; line-height: 20px;">
+On Wall Street
+<br /><br />
+
+</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td bgcolor="#ee4c50" style="padding: 30px 30px 30px 30px;">
+<table border="0" cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td style="color: #ffffff; font-family: Arial, sans-serif; font-size: 14px;">
+&reg;Espress News, 2016<br/>
+<a href="#" style="color: #ffffff;"><font color="#ffffff">Unsubscribe</font></a>
+</td>
+<td align="right">
+<table border="0" cellpadding="0" cellspacing="0">
+<tr>
+<td>
+<a href="http://www.twitter.com/">
+<img src="http://placehold.it/170x129" alt="Twitter" width="38" height="38" style="display: block;" border="0" />
+</a>
+</td>
+<td style="font-size: 0; line-height: 0;" width="20">&nbsp;</td>
+<td>
+<a href="http://www.twitter.com/">
+<img src="http://placehold.it/170x129" alt="Facebook" width="38" height="38" style="display: block;" border="0" />
+</a>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+<!-- End Outer-most Table -->
+
+</body>
+</html>
+"""
 
 message.attach(MIMEText(html, 'html'))
 
