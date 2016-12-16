@@ -25,6 +25,9 @@ mailing_list = ['jared.donohue@gmail.com']
 # aid = artist information dictionary --> {'artist':{'query':'','title':'','link':'','date':''}}
 aid = create_dict(artists)
 
+# sd = stocks dictionary --> {'MSFT': 63.23, 'FB': 126.11, 'AMZN':788.99}
+sd = {}
+
 # Put Queries into Artist dictionary
 for a in aid:
 	query = ''
@@ -37,18 +40,17 @@ for a in aid:
 # Put news info into Artist dictionary
 for a in aid:
 	d = feedparser.parse(google_news_rss_url + aid[a]['query'] + '&output=rss')
-	aid[a]['title'] = d['entries'][1]['title'][:70]
+	aid[a]['title'] = d['entries'][1]['title']
 	aid[a]['link']  = d['entries'][1]['link']
 	aid[a]['date']  = d['entries'][1]['published']
 
-#
-# for stock in stock_abrevs:
-# 	r = requests.get(google_finance_feed + stock)
-# 	json_response = json.loads(r.text[4:])
-# 	curr_price = json_response[0]['l_cur']
-# 	print(stock + ': ' + curr_price)
-#
-#
+
+for stock in stock_abrevs:
+	r = requests.get(google_finance_feed + stock)
+	json_response = json.loads(r.text[4:])
+	curr_price = json_response[0]['l_cur']
+	sd[stock] = curr_price
+
 # Mail Service
 message = MIMEMultipart()
 message['From'] = source
@@ -57,10 +59,14 @@ message['Subject'] = 'Good Morning from Espress, Today is ' + time.strftime("%d/
 
 f1 = open('../html/template1.html','r')
 f2 = open('../html/template2.html','r')
+f3 = open('../html/template3.html','r')
 html = f1.read()
 for a in aid:
 	html += "<a href ='" + aid[a]['link'] + "'</a>" + aid[a]['title'] + "<br /><br />"
 html += f2.read()
+for s in sd:
+	html += s + " price per share: $" + sd[s] + "<br /><br />"
+html += f3.read()
 
 message.attach(MIMEText(html.encode('utf-8'), 'html', 'utf-8'))
 
