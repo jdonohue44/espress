@@ -57,9 +57,11 @@ message['From'] = source
 message['To'] = ", ".join(mailing_list)
 message['Subject'] = 'Good Morning from Espress, Today is ' + time.strftime("%d/%m/%Y")
 
-f1 = open('../html/template1.html','r')
-f2 = open('../html/template2.html','r')
-f3 = open('../html/template3.html','r')
+f1 = open('/home/ec2-user/espress/html/template1.html','r')
+f2 = open('/home/ec2-user/espress/html/template2.html','r')
+f3 = open('/home/ec2-user/espress/html/template3.html','r')
+log_file = open('/home/ec2-user/espress/logs.log','a')
+
 html = f1.read()
 for a in aid:
 	html += "<a href ='" + aid[a]['link'] + "'</a>" + aid[a]['title'] + "<br /><br />"
@@ -77,6 +79,7 @@ smtp_server.login(source, '5638JabroniStreet**')
 try:
    smtp_server.sendmail(source, mailing_list, message.as_string())
    smtp_server.quit()
-   print("Successfully sent email")
+   log_file.write("Successfully sent email -- " + time.strftime("%m-%d-%Y %H:%M"))
 except smtplib.SMTPException:
    print("Error: unable to send email")
+   log_file.write("ERROR sending email -- " + time.strftime("%m-%d-%Y %H:%M"))
