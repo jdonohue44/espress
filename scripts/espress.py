@@ -106,7 +106,7 @@ for user in cur.fetchall():
 	smtp_server.login(source, '5638JabroniStreet**')
 
 	try:
-	   smtp_server.sendmail(source, mailing_list, message.as_string())
+	   smtp_server.sendmail(source, dest, message.as_string())
 	   smtp_server.quit()
 	   log_file.write("Successfully sent email -- " + time.strftime("%m-%d-%Y %H:%M"))
 	except smtplib.SMTPException:
