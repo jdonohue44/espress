@@ -29,7 +29,7 @@ cur.execute("SELECT * FROM USERS")
 
 # print all the first cell of all the rows
 for row in cur.fetchall():
-    test_file.write(row[0]+"\n")
+    test_file.write(row[0])
 
 db.close()
 
