@@ -30,7 +30,11 @@ cur.execute("SELECT * FROM USERS")
 # print each user in DB
 for user in cur.fetchall():
     # test_file.write(str(row[0]) + "\t" + row[1] + "\t" + row[2] + "\n")
-	cur.execute("SELECT USER_INTERESTS.Interest_ID FROM USER_INTERESTS WHERE USER_INTERESTS.User_ID = %s;", (user[0],))
+	cur.execute("""
+	SELECT INTERESTS.Interest FROM USER_INTERESTS
+	INNER JOIN USERS ON USERS.ID = %s
+	INNER JOIN INTERESTS ON INTERESTS.ID = USER_INTERESTS.Interest_ID;
+	""", (user[0],))
 	for interest in cur.fetchall():
 		test_file.write(str(interest[0]) +"\n")
 db.close()
