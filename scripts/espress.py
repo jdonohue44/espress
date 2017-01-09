@@ -69,9 +69,9 @@ for user in cur.fetchall():
 	# Put news info into Artist dictionary
 	for i in iid:
 		d = feedparser.parse(google_news_rss_url + iid[i]['query'] + '&output=rss')
-		iid[a]['title'] = d['entries'][1]['title']
-		iid[a]['link']  = d['entries'][1]['link']
-		iid[a]['date']  = d['entries'][1]['published']
+		iid[i]['title'] = d['entries'][1]['title']
+		iid[i]['link']  = d['entries'][1]['link']
+		iid[i]['date']  = d['entries'][1]['published']
 
 
 	for stock in stock_abrevs:
