@@ -32,8 +32,9 @@ for user in cur.fetchall():
     # test_file.write(str(row[0]) + "\t" + row[1] + "\t" + row[2] + "\n")
 	cur.execute("""
 	SELECT INTERESTS.Interest FROM USER_INTERESTS
-	INNER JOIN USERS ON USERS.ID = %s
-	INNER JOIN INTERESTS ON INTERESTS.ID = USER_INTERESTS.Interest_ID;
+	INNER JOIN USERS ON USERS.ID = USER_INTERESTS.User_ID
+	INNER JOIN INTERESTS ON INTERESTS.ID = USER_INTERESTS.Interest_ID
+	where USERS.ID = %s;
 	""", (user[0],))
 	for interest in cur.fetchall():
 		test_file.write(str(user[0]) + "\t" + str(interest[0]) +"\n")
