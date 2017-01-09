@@ -108,9 +108,9 @@ for user in cur.fetchall():
 	try:
 	   smtp_server.sendmail(source, dest, message.as_string())
 	   smtp_server.quit()
-	   log_file.write("Successfully sent email -- " + time.strftime("%m-%d-%Y %H:%M"))
+	   log_file.write("Successfully sent email -- " + time.strftime("%m-%d-%Y %H:%M") + "\n")
 	except smtplib.SMTPException:
 	   print("Error: unable to send email")
-	   log_file.write("ERROR sending email to" + dest + " -- " + time.strftime("%m-%d-%Y %H:%M"))
+	   log_file.write("ERROR sending email to" + dest + " -- " + time.strftime("%m-%d-%Y %H:%M") + "\n")
 
 db.close()
