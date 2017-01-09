@@ -27,10 +27,12 @@ cur = db.cursor()
 # Use all the SQL you like
 cur.execute("SELECT * FROM USERS")
 
-# print all the first cell of all the rows
-for row in cur.fetchall():
-    test_file.write(str(row[0]) + "\t" + row[1] + "\t" + row[2] + "\n")
-
+# print each user in DB
+for user in cur.fetchall():
+    # test_file.write(str(row[0]) + "\t" + row[1] + "\t" + row[2] + "\n")
+	cur.execute("SELECT USER_INTERESTS.Interest_ID FROM USER_INTERESTS WHERE USER_INTERESTS.User_ID = %s;", (user[0]))
+	for interest in cur.fetchall():
+		test_file.write(str(interest[0]) +"\n")
 db.close()
 
 
