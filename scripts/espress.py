@@ -36,7 +36,7 @@ for user in cur.fetchall():
 	INNER JOIN INTERESTS ON INTERESTS.ID = USER_INTERESTS.Interest_ID;
 	""", (user[0],))
 	for interest in cur.fetchall():
-		test_file.write(user[0] + "\t" = str(interest[0]) +"\n")
+		test_file.write(user[0] + "\t" + str(interest[0]) +"\n")
 db.close()
 
 
