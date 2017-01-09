@@ -37,7 +37,7 @@ for user in cur.fetchall():
 	where USERS.ID = %s;
 	""", (user[0],))
 	for interest in cur.fetchall():
-		test_file.write(str(user[0]) + "\t" + str(interest[0]) +"\n")
+		test_file.write(str(user[1]) + "\t" + str(interest[0]) +"\n")
 db.close()
 
 
