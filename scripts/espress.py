@@ -88,16 +88,12 @@ for user in cur.fetchall():
 
 	f1 = open('/home/ec2-user/espress/html/template1.html','r')
 	f2 = open('/home/ec2-user/espress/html/template2.html','r')
-	f3 = open('/home/ec2-user/espress/html/template3.html','r')
 	log_file = open('/home/ec2-user/espress/logs.log','a')
 
 	html = f1.read()
 	for i in iid:
 		html += "<a href ='" + iid[i]['link'] + "'</a>" + iid[i]['title'] + "<br /><br />"
 	html += f2.read()
-	for s in sd:
-		html += s + " price per share: $" + sd[s] + "<br /><br />"
-	html += f3.read()
 
 	message.attach(MIMEText(html.encode('utf-8'), 'html', 'utf-8'))
 
