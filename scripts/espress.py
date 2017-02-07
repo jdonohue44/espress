@@ -68,7 +68,7 @@ for user in cur.fetchall():
 		iid[i]['link']   = d['entries'][1]['link']
 		iid[i]['date']   = d['entries'][1]['published'][:-13]
 		iid[i]['source'] = d['entries'][1]['title'].split("-")[-1]
-		iid[i]['title']  = d['entries'][1]['title'][:-len(iid[i]['source'])]
+		iid[i]['title']  = d['entries'][1]['title'][:-(len(iid[i]['source'])+2)]
 
 	# Mail Service
 	message = MIMEMultipart()
