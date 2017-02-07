@@ -65,10 +65,10 @@ for user in cur.fetchall():
 	# Put news info into Artist dictionary
 	for i in iid:
 		d = feedparser.parse(google_news_rss_url + iid[i]['query'] + '&output=rss')
-		iid[i]['title']  = d['entries'][1]['title'][:-20]
 		iid[i]['link']   = d['entries'][1]['link']
 		iid[i]['date']   = d['entries'][1]['published'][:-13]
 		iid[i]['source'] = d['entries'][1]['title'].split("-")[-1]
+		iid[i]['title']  = d['entries'][1]['title'][:-len(iid[i]['source'])]
 
 	# Mail Service
 	message = MIMEMultipart()
