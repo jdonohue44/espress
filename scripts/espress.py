@@ -16,7 +16,6 @@ from email.mime.text import MIMEText
 
 # Feed/Parse Variables
 interests = []
-stock_abrevs = []
 google_news_rss_url = 'https://news.google.com/news?cf=all&hl=en&pz=1&ned=us&q='
 google_finance_feed = 'http://www.google.com/finance/info?q=NASDAQ:'
 
@@ -24,9 +23,6 @@ google_finance_feed = 'http://www.google.com/finance/info?q=NASDAQ:'
 source =  'espressmorningnews@gmail.com'
 dest   =  ''
 name   =  ''
-
-# sd = stocks dictionary --> {'MSFT': 63.23, 'FB': 126.11, 'AMZN':788.99}
-sd = {}
 
 db = MySQLdb.connect(host="jd-db-instance.csuhsua8cx8a.us-east-1.rds.amazonaws.com",    # your host, usually localhost
                      user="jdonohue44",         # your username
@@ -69,16 +65,10 @@ for user in cur.fetchall():
 	# Put news info into Artist dictionary
 	for i in iid:
 		d = feedparser.parse(google_news_rss_url + iid[i]['query'] + '&output=rss')
-		iid[i]['title'] = d['entries'][1]['title']
-		iid[i]['link']  = d['entries'][1]['link']
-		iid[i]['date']  = d['entries'][1]['published']
-
-
-	for stock in stock_abrevs:
-		r = requests.get(google_finance_feed + stock)
-		json_response = json.loads(r.text[4:])
-		curr_price = json_response[0]['l_cur']
-		sd[stock] = curr_price
+		iid[i]['title']  = d['entries'][1]['title'][:-20]
+		iid[i]['link']   = d['entries'][1]['link']
+		iid[i]['date']   = d['entries'][1]['published']
+		iid[i]['source'] = d['entries'][1]['title'].split("-")[-1]
 
 	# Mail Service
 	message = MIMEMultipart()
@@ -92,7 +82,8 @@ for user in cur.fetchall():
 
 	html = f1.read()
 	for i in iid:
-		html += "<a href ='" + iid[i]['link'] + "'</a>" + iid[i]['title'] + "<br /><br />"
+		html += "<a href ='" + iid[i]['link'] + "'</a>" + "<b>(" + iid[i]['date'] + ")</b>"
+		+ iid[i]['title'] + " - <b>" + iid[i]['source'] + "</b><br /><br />"
 	html += f2.read()
 
 	message.attach(MIMEText(html.encode('utf-8'), 'html', 'utf-8'))
