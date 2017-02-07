@@ -67,7 +67,7 @@ for user in cur.fetchall():
 		d = feedparser.parse(google_news_rss_url + iid[i]['query'] + '&output=rss')
 		iid[i]['title']  = d['entries'][1]['title'][:-20]
 		iid[i]['link']   = d['entries'][1]['link']
-		iid[i]['date']   = d['entries'][1]['published']
+		iid[i]['date']   = d['entries'][1]['published'][:-13]
 		iid[i]['source'] = d['entries'][1]['title'].split("-")[-1]
 
 	# Mail Service
@@ -82,7 +82,7 @@ for user in cur.fetchall():
 
 	html = f1.read()
 	for i in iid:
-		html += "<a href ='" + iid[i]['link'] + "'</a>" + "<b>(" + iid[i]['date'] + ")</b>" + iid[i]['title'] + " - <b>" + iid[i]['source'] + "</b><br /><br />"
+		html += "<a href ='" + iid[i]['link'] + "'</a>" + "<b>(" + iid[i]['date'] + ")</b> " + iid[i]['title'] + " - <b>" + iid[i]['source'] + "</b><br /><br />"
 	html += f2.read()
 
 	message.attach(MIMEText(html.encode('utf-8'), 'html', 'utf-8'))
