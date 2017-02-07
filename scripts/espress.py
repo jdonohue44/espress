@@ -82,8 +82,7 @@ for user in cur.fetchall():
 
 	html = f1.read()
 	for i in iid:
-		html += "<a href ='" + iid[i]['link'] + "'</a>" + "<b>(" + iid[i]['date'] + ")</b>"
-		+ iid[i]['title'] + " - <b>" + iid[i]['source'] + "</b><br /><br />"
+		html += "<a href ='" + iid[i]['link'] + "'</a>" + "<b>(" + iid[i]['date'] + ")</b>" + iid[i]['title'] + " - <b>" + iid[i]['source'] + "</b><br /><br />"
 	html += f2.read()
 
 	message.attach(MIMEText(html.encode('utf-8'), 'html', 'utf-8'))
