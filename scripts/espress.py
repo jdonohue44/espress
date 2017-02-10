@@ -82,7 +82,7 @@ for user in cur.fetchall():
 
 	html = f1.read()
 	for i in iid:
-		html += "<tr style='margin-bottom:10px;'><td style='padding: 20px; border-color: #dbdbdb; border-style: solid; border-width: 6px'>"
+		html += "<tr><td style='padding: 20px; border-color: #dbdbdb; border-style: solid; border-width: 10px 10px 0px 10px'>"
 		html += "<b>(" + iid[i]['date'] + ")</b> " + " <b>" + iid[i]['source'] + "</b><br />"
 		html += "<a href ='" + iid[i]['link'] + "'> " + iid[i]['title'] + "</a>"
 		html += "</td></tr>"
