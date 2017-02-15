@@ -17,7 +17,6 @@ from email.mime.text import MIMEText
 # Feed/Parse Variables
 interests = []
 google_news_rss_url = 'https://news.google.com/news?cf=all&hl=en&pz=1&ned=us&q='
-google_finance_feed = 'http://www.google.com/finance/info?q=NASDAQ:'
 
 #Mail Variables
 source =  'espressmorningnews@gmail.com'
@@ -36,24 +35,33 @@ cur = db.cursor()
 # Use all the SQL you like
 cur.execute("SELECT * FROM USERS")
 
-# print each user in DB
+# each user in DB
 for user in cur.fetchall():
 	uid  = user[0]
 	name = user[1]
 	dest = user[2]
+
+	# get this users interests from the join table USER_INTERESTS
 	cur.execute("""
 	SELECT INTERESTS.Interest FROM USER_INTERESTS
 	INNER JOIN USERS ON USERS.ID = USER_INTERESTS.User_ID
 	INNER JOIN INTERESTS ON INTERESTS.ID = USER_INTERESTS.Interest_ID
 	where USERS.ID = %s;
 	""", (uid,))
-	for interest in cur.fetchall():
+
+	# if this user has no interests (rare) then skip to next user
+	all_interests = cur.fetchall()
+	if(len(all_interests) == 0):
+		continue;
+
+	# get all the users interests
+	for interest in all_interests:
 		interests.append(interest[0])
 
 	# iid = interest information dictionary --> {'interest':{'query':'','title':'','link':'','date':''}}
 	iid = create_dict(interests)
 
-	# Put Queries into Artist dictionary
+	# Put Queries into interest information dictionary
 	for i in iid:
 		query = ''
 		words = i.lower().split()
@@ -62,7 +70,7 @@ for user in cur.fetchall():
 		query += words[len(words)-1]
 		iid[i]['query'] = query
 
-	# Put news info into Artist dictionary
+	# Put news info into interest information dictionary
 	for i in iid:
 		d = feedparser.parse(google_news_rss_url + iid[i]['query'] + '&output=rss')
 		iid[i]['link']   = d['entries'][1]['link']
