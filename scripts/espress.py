@@ -93,8 +93,8 @@ for user in cur.fetchall():
 		html += "<tr><td style='padding: 20px; border-color: #dbdbdb; border-style: solid; border-width: 6px 6px 0px 6px'>"
 		html += "<div style='text-align=center;'><b>" + iid[i]['title'] + "</b></div><br />"
 		html += "<div style='text-align=center;'><a href ='" + iid[i]['link'] + "'>Read Article</a></div><br />"
-		html += "<p style='font-size: 8px; margin:0;'>(" + iid[i]['date'] + ") " + iid[i]['source'] + "</p><br />"
-		html += "<p style='font-size=8px; margin: 0;'>based on your interest in <b>" + i + "</b></p>"
+		html += "<p style='font-size: 10px; margin:0;'>(" + iid[i]['date'] + ") " + iid[i]['source'] + "</p><br />"
+		html += "<p style='font-size: 10px; margin:0;'>based on your interest in " + i + " </p>"
 		html += "</td></tr>"
 	html += f2.read()
 
