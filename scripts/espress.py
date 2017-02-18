@@ -91,9 +91,10 @@ for user in cur.fetchall():
 	html = f1.read()
 	for i in iid:
 		html += "<tr><td style='padding: 20px; border-color: #dbdbdb; border-style: solid; border-width: 6px 6px 0px 6px'>"
-		html += "<b>(" + iid[i]['date'] + ")</b> " + " <b>" + iid[i]['source'] + "</b><br />"
-		html += "<a href ='" + iid[i]['link'] + "'> " + iid[i]['title'] + "</a><br />"
-		html += "<div'><p style='font-size=10px;'>based on your interest in <b>" + i + "</b></p></div>"
+		html += "<div style='text-align=center;'><b>" + iid[i]['title'] + "</b></div><br />"
+		html += "<div style='text-align=center;'><a href ='" + iid[i]['link'] + "'>Read Article</a></div><br />"
+		html += "<p>(" + iid[i]['date'] + ")</p><p>" + iid[i]['source'] + "</p><br />"
+		html += "<div><p style='font-size=10px;'>based on your interest in <b>" + i + "</b></p></div>"
 		html += "</td></tr>"
 	html += f2.read()
 
