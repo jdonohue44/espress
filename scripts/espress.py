@@ -82,7 +82,7 @@ for user in cur.fetchall():
 	message = MIMEMultipart()
 	message['From'] = source
 	message['To'] = dest
-	message['Subject'] = 'Good Morning from Espress, Today is ' + time.strftime("%d/%m/%Y")
+	message['Subject'] = 'Espress News Monday'
 
 	f1 = open('/home/ec2-user/espress/html/template1.html','r')
 	f2 = open('/home/ec2-user/espress/html/template2.html','r')
@@ -93,7 +93,7 @@ for user in cur.fetchall():
 		html += "<tr><td style='padding: 20px;'>"
 		html += "<div style='text-align:center; padding: 10px; border-style: solid; border-radius: 4px; border-width: 1px; border-color: #c5c5c5;'><b style='font-weight: 100; font-size: 24px; font-family: sans-serif;'>" + iid[i]['title'] + "</b></div>"
 		html += "<p style='text-align: center; font-size: 11px; margin-top: 4px;'>Retrieved from " + iid[i]['source'] + " on " + iid[i]['date'] + ", based on your interest in <b>" + i + "</b></p>"
-		html += "<div style='text-align:right;'><a style='padding:8px; font-size: 16px;' href ='" + iid[i]['link'] + "'>Read Article</a></div>"
+		html += "<div style='text-align:right;'><a style='padding:6px; font-size: 16px; border-style: solid; border-width: 1px;' href ='" + iid[i]['link'] + "'>Read Article</a></div>"
 		html += "</td></tr>"
 	html += f2.read()
 
