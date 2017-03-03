@@ -82,7 +82,7 @@ for user in cur.fetchall():
 	message = MIMEMultipart()
 	message['From'] = source
 	message['To'] = dest
-	message['Subject'] = 'Your Custom Newsletter'
+	message['Subject'] = 'Your Espress Newsletter'
 
 	f1 = open('/home/ec2-user/espress/html/template1.html','r')
 	f2 = open('/home/ec2-user/espress/html/template2.html','r')
