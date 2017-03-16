@@ -14,8 +14,7 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
 
-# Feed/Parse Variables
-interests = []
+# Feed/Parse Global
 google_news_rss_url = 'https://news.google.com/news?cf=all&hl=en&pz=1&ned=us&q='
 
 #Mail Variables
@@ -40,6 +39,7 @@ for user in cur.fetchall():
 	uid  = user[0]
 	name = user[1]
 	dest = user[2]
+	interests = []
 
 	# get this users interests from the join table USER_INTERESTS
 	cur.execute("""
@@ -55,10 +55,8 @@ for user in cur.fetchall():
 		continue;
 
 	# get all the users interests
-	print_list = []
 	for interest in all_interests:
 		interests.append(interest[0])
-		print_list.append(interest[0])
 
 	# iid = interest information dictionary --> {'interest':{'query':'','title':'','link':'','date':''}}
 	iid = create_dict(interests)
@@ -92,7 +90,7 @@ for user in cur.fetchall():
 
 	# html = f1.read()
 	for i in iid:
-		log_file.write(str(len(print_list)) + "\n")
+		log_file.write("User: " + user[1] + "\tInterest:" + i + ".\n")
 	log_file.write("\n\n\n")
 	# 	html += "<tr><td style='padding: 20px;'>"
 	# 	html += "<div style='text-align:center; padding: 10px;'><b style='font-weight: 100; font-size: 24px; font-family: sans-serif;'>" + iid[i]['title'] + "</b></div>"
