@@ -89,7 +89,6 @@ for user in cur.fetchall():
 	log_file = open('/home/ec2-user/espress/logs.log','a')
 
 	# html = f1.read()
-	log_file.write("iid: " + iid)
 	for i in iid:
 		log_file.write("User: " + user[1] + "\tInterest: " + i + ".\n")
 	log_file.write("\n\n\n")
