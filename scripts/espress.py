@@ -91,6 +91,7 @@ for user in cur.fetchall():
 	html = f1.read()
 	for i in iid:
 		log_file.write("User -- " + user[1] + "\tInterest -- " + i + ".")
+	log_file.write("\n")
 	# 	html += "<tr><td style='padding: 20px;'>"
 	# 	html += "<div style='text-align:center; padding: 10px;'><b style='font-weight: 100; font-size: 24px; font-family: sans-serif;'>" + iid[i]['title'] + "</b></div>"
 	# 	html += "<p style='text-align: center; font-size: 11px; margin-top: 4px;'>Retrieved from " + iid[i]['source'] + " on " + iid[i]['date'] + ", based on your interest in <b>" + i + "</b></p>"
