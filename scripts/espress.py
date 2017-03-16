@@ -88,29 +88,27 @@ for user in cur.fetchall():
 	f2 = open('/home/ec2-user/espress/html/template2.html','r')
 	log_file = open('/home/ec2-user/espress/logs.log','a')
 
-	# html = f1.read()
+	html = f1.read()
 	for i in iid:
-		log_file.write("User: " + user[1] + "\tInterest:" + i + ".\n")
-	log_file.write("\n\n\n")
-	# 	html += "<tr><td style='padding: 20px;'>"
-	# 	html += "<div style='text-align:center; padding: 10px;'><b style='font-weight: 100; font-size: 24px; font-family: sans-serif;'>" + iid[i]['title'] + "</b></div>"
-	# 	html += "<p style='text-align: center; font-size: 11px; margin-top: 4px;'>Retrieved from " + iid[i]['source'] + " on " + iid[i]['date'] + ", based on your interest in <b>" + i + "</b></p>"
-	# 	html += "<div style='text-align:right;'><a style='padding:6px; font-size: 16px; text-decoration: underline; margin-right: 30px;' href ='" + iid[i]['link'] + "'>Read Article</a></div>"
-	# 	html += "</td></tr>"
-	# html += f2.read()
+		html += "<tr><td style='padding: 20px;'>"
+		html += "<div style='text-align:center; padding: 10px;'><b style='font-weight: 100; font-size: 24px; font-family: sans-serif;'>" + iid[i]['title'] + "</b></div>"
+		html += "<p style='text-align: center; font-size: 11px; margin-top: 4px;'>Retrieved from " + iid[i]['source'] + " on " + iid[i]['date'] + ", based on your interest in <b>" + i + "</b></p>"
+		html += "<div style='text-align:right;'><a style='padding:6px; font-size: 16px; text-decoration: underline; margin-right: 30px;' href ='" + iid[i]['link'] + "'>Read Article</a></div>"
+		html += "</td></tr>"
+	html += f2.read()
 
-	# message.attach(MIMEText(html.encode('utf-8'), 'html', 'utf-8'))
+	message.attach(MIMEText(html.encode('utf-8'), 'html', 'utf-8'))
 
-	# smtp_server = smtplib.SMTP('smtp.gmail.com', 587)
-	# smtp_server.starttls()
-	# smtp_server.login(source, '5638JabroniStreet**')
+	smtp_server = smtplib.SMTP('smtp.gmail.com', 587)
+	smtp_server.starttls()
+	smtp_server.login(source, '5638JabroniStreet**')
 
-	# try:
-	#    smtp_server.sendmail(source, dest, message.as_string())
-	#    smtp_server.quit()
-	#    log_file.write("Successfully sent email -- " + time.strftime("%m-%d-%Y %H:%M") + "\n")
-	# except smtplib.SMTPException:
-	#    print("Error: unable to send email")
-	#    log_file.write("ERROR sending email to" + dest + " -- " + time.strftime("%m-%d-%Y %H:%M") + "\n")
+	try:
+	   smtp_server.sendmail(source, dest, message.as_string())
+	   smtp_server.quit()
+	   log_file.write("Successfully sent email -- " + time.strftime("%m-%d-%Y %H:%M") + "\n")
+	except smtplib.SMTPException:
+	   print("Error: unable to send email")
+	   log_file.write("ERROR sending email to" + dest + " -- " + time.strftime("%m-%d-%Y %H:%M") + "\n")
 
 db.close()
