@@ -55,8 +55,10 @@ for user in cur.fetchall():
 		continue;
 
 	# get all the users interests
+	print_list = []
 	for interest in all_interests:
 		interests.append(interest[0])
+		print_list.append(interest[0])
 
 	# iid = interest information dictionary --> {'interest':{'query':'','title':'','link':'','date':''}}
 	iid = create_dict(interests)
@@ -90,7 +92,7 @@ for user in cur.fetchall():
 
 	# html = f1.read()
 	for i in iid:
-		log_file.write("ID: " + str(user[0]) +"\tName: " + user[1] + "\tEmail: " + user[2] + "\tInterest: " + i + ".\n")
+		log_file.write(len(print_list) + "\n")
 	log_file.write("\n\n\n")
 	# 	html += "<tr><td style='padding: 20px;'>"
 	# 	html += "<div style='text-align:center; padding: 10px;'><b style='font-weight: 100; font-size: 24px; font-family: sans-serif;'>" + iid[i]['title'] + "</b></div>"
