@@ -87,14 +87,14 @@ for user in users:
 					  int(month_to_decimal_map[d['entries'][0]['published'][8:11]] +
 					  d['entries'][0]['published'][5:7] +
 					  d['entries'][0]['published'][17:19] +
-					  d['entries'][0]['published'][20:22]))
+					  d['entries'][0]['published'][20:22])))
 		index = 0
 		for x in range(1,len(d['entries'])):
 			cur = (now - (
 				  int(month_to_decimal_map[d['entries'][x]['published'][8:11]] +
 				  d['entries'][x]['published'][5:7] +
 				  d['entries'][x]['published'][17:19] +
-				  d['entries'][x]['published'][20:22]))
+				  d['entries'][x]['published'][20:22])))
 			if(cur < most_recent):
 				most_recent = cur
 				index = x
