@@ -61,7 +61,7 @@ for user in users:
 		d = feedparser.parse('https://news.google.com/news?cf=all&hl=en&pz=1&ned=us&q='+ interest_info_dict[i]['query'] + '&output=rss')
 		most_recent = int(d['entries'][0]['published'][5:7] + d['entries'][0]['published'][17:19] + d['entries'][0]['published'][20:22])
 		index = 0
-		for x in range(1,len(d['entries']))
+		for x in range(1,len(d['entries'])):
 			cur = int(d['entries'][x]['published'][5:7] + d['entries'][x]['published'][17:19] + d['entries'][x]['published'][20:22])
 			if(cur > most_recent):
 				most_recent = cur
