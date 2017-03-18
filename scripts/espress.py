@@ -48,24 +48,24 @@ for user in users:
 	# 	interests.append(interest[0])
 
 	# create interest information dictionary --> {'interest':{'query':'','title':'','link':'','date':''}}
-	interest_info_dictonary = create_dict(interests)
+	interest_info_dict = create_dict(interests)
 
 	# Put Queries into interest information dictionary
-	for i in interest_info_dictonary:
+	for i in interest_info_dict:
 		query = ''
 		words = i.lower().split()
 		for num in range(0,len(words)-1):
 			query += words[num] + "+"
 		query += words[len(words)-1]
-		iid[i]['query'] = query
+		interest_info_dict[i]['query'] = query
 
 	# Put news info into interest information dictionary
 	for i in iid:
 		d = feedparser.parse('https://news.google.com/news?cf=all&hl=en&pz=1&ned=us&q='+ iid[i]['query'] + '&output=rss')
-		# iid[i]['link']   = d['entries'][1]['link']
-		# iid[i]['date']   = d['entries'][1]['published'][:-13]
-		# iid[i]['source'] = d['entries'][1]['title'].split("-")[-1]
-		# iid[i]['title']  = d['entries'][1]['title'][:-(len(iid[i]['source'])+2)]
+		# interest_info_dict[i]['link']   = d['entries'][1]['link']
+		# interest_info_dict[i]['date']   = d['entries'][1]['published'][:-13]
+		# interest_info_dict[i]['source'] = d['entries'][1]['title'].split("-")[-1]
+		# interest_info_dict[i]['title']  = d['entries'][1]['title'][:-(len(iid[i]['source'])+2)]
 		print(d)
 
 	# Mail Service
