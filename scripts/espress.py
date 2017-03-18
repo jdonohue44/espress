@@ -60,8 +60,8 @@ for user in users:
 		interest_info_dict[i]['query'] = query
 
 	# Put news info into interest information dictionary
-	for i in iid:
-		d = feedparser.parse('https://news.google.com/news?cf=all&hl=en&pz=1&ned=us&q='+ iid[i]['query'] + '&output=rss')
+	for i in interest_info_dict:
+		d = feedparser.parse('https://news.google.com/news?cf=all&hl=en&pz=1&ned=us&q='+ interest_info_dict[i]['query'] + '&output=rss')
 		# interest_info_dict[i]['link']   = d['entries'][1]['link']
 		# interest_info_dict[i]['date']   = d['entries'][1]['published'][:-13]
 		# interest_info_dict[i]['source'] = d['entries'][1]['title'].split("-")[-1]
