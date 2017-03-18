@@ -83,7 +83,7 @@ for user in users:
 		interest_info_dict[i]['link']   = d['entries'][index]['link']
 		interest_info_dict[i]['date']   = d['entries'][index]['published'][:-13]
 		interest_info_dict[i]['source'] = d['entries'][index]['title'].split("-")[-1]
-		interest_info_dict[i]['title']  = d['entries'][index]['title'][:-(len(iid[i]['source'])+2)]
+		interest_info_dict[i]['title']  = d['entries'][index]['title'][:-(len(interest_info_dict[i]['source'])+2)]
 
 	# Mail Service
 	message = MIMEMultipart()
