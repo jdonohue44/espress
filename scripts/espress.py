@@ -8,6 +8,9 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
 source = 'espressmorningnews@gmail.com'
+month_to_decimal_map = {'Jan':1, 'Feb':2, 'Mar':3, 'Apr':4,
+						'May':5, 'Jun':6, 'Jul':7, 'Aug':8,
+						'Sep':9, 'Oct':10,'Nov':11,'Dec':12}
 
 def create_dict(interests):
 	dict = {}
@@ -76,12 +79,22 @@ for user in users:
 	# time.strftime directives:
 	# %m = month(01,12) %d = day(01,31) %H = hour(00,23) %M = minute(00,59)
 	for i in interest_info_dict:
-		d = feedparser.parse('https://news.google.com/news?cf=all&hl=en&pz=1&ned=us&q='+ interest_info_dict[i]['query'] + '&output=rss')
+		d = feedparser.parse(
+			'https://news.google.com/news?cf=all&hl=en&pz=1&ned=us&q='+
+			 interest_info_dict[i]['query'] + '&output=rss')
 		now = int(time.strftime("%m%d%H%M"))
-		most_recent = now - int(d['entries'][0]['published'][8:11] + d['entries'][0]['published'][5:7] + d['entries'][0]['published'][17:19] + d['entries'][0]['published'][20:22])
+		most_recent = (now - (
+					  int(month_to_decimal_map[d['entries'][0]['published'][8:11]] +
+					  d['entries'][0]['published'][5:7] +
+					  d['entries'][0]['published'][17:19] +
+					  d['entries'][0]['published'][20:22]))
 		index = 0;
 		for x in range(1,len(d['entries'])):
-			cur = now - int(d['entries'][x]['published'][8:11] + d['entries'][x]['published'][5:7] + d['entries'][x]['published'][17:19] + d['entries'][x]['published'][20:22])
+			cur = (now - (
+				  int(month_to_decimal_map[d['entries'][x]['published'][8:11]] +
+				  d['entries'][x]['published'][5:7] +
+				  d['entries'][x]['published'][17:19] +
+				  d['entries'][x]['published'][20:22]))
 			if(cur < most_recent):
 				most_recent = cur;
 				index = x
