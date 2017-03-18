@@ -68,7 +68,7 @@ for user in users:
 		# interest_info_dict[i]['title']  = d['entries'][1]['title'][:-(len(iid[i]['source'])+2)]
 		day = int(d['entries'][0]['published'][5:7])
 		time_hour = int(d['entries'][0]['published'][-12:-10])
-		time_min = int(d['entries'][0]['published'][-10:-8])
+		time_min = int(d['entries'][0]['published'][-9:-7])
 
 		print("day: " + day + "\thour: " + time_hour + "\tmin: " + time_min)
 
