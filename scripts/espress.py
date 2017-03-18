@@ -18,22 +18,12 @@ def create_dict(interests):
 		dict[i] = {}
 	return dict
 
-def get_users_from_DB():
-	db = MySQLdb.connect(host="jd-db-instance.csuhsua8cx8a.us-east-1.rds.amazonaws.com",
-	                     user="jdonohue44",
-	                     passwd="dubaiguy$$",
-	                     db="Dubai")
-	cur = db.cursor()
-	cur.execute("SELECT * FROM USERS WHERE Name = 'jared.donohue@gmail.com'")
-	cur.fetchall()
-	return cur
-
 db = MySQLdb.connect(host="jd-db-instance.csuhsua8cx8a.us-east-1.rds.amazonaws.com",
                      user="jdonohue44",
                      passwd="dubaiguy$$",
                      db="Dubai")
 cur = db.cursor()
-cur.execute("SELECT * FROM USERS")
+cur.execute("SELECT * FROM USERS WHERE Name = 'jared.donohue@gmail.com';")
 users = cur.fetchall()
 
 for user in users:
