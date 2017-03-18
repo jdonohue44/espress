@@ -66,10 +66,11 @@ for user in users:
 		# interest_info_dict[i]['date']   = d['entries'][1]['published'][:-13]
 		# interest_info_dict[i]['source'] = d['entries'][1]['title'].split("-")[-1]
 		# interest_info_dict[i]['title']  = d['entries'][1]['title'][:-(len(iid[i]['source'])+2)]
-		print(d['entries'][0]['published'][5:7])
-		print(d['entries'][0]['published'][-12:-4])
-		print(d['entries'][1]['published'][5:7])
-		print(d['entries'][1]['published'][-12:-4])
+		day = int(d['entries'][0]['published'][5:7])
+		time_hour = int(d['entries'][0]['published'][-12:-10])
+		time_min = int(d['entries'][0]['published'][-10:-8])
+
+		print("day: " + day + "\thour: " + time_hour + "\tmin: " + time_min)
 
 	# Mail Service
 	# message = MIMEMultipart()
