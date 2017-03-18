@@ -70,7 +70,7 @@ for user in users:
 		time_hour = int(d['entries'][0]['published'][-12:-10])
 		time_min = int(d['entries'][0]['published'][-9:-7])
 
-		print("day: " + day + "\thour: " + time_hour + "\tmin: " + time_min)
+		print("day: " + str(day) + "\thour: " + str(time_hour) + "\tmin: " + str(time_min))
 
 	# Mail Service
 	# message = MIMEMultipart()
