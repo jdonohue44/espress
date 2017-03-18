@@ -95,7 +95,7 @@ for user in users:
 				  d['entries'][x]['published'][5:7] +
 				  d['entries'][x]['published'][17:19] +
 				  d['entries'][x]['published'][20:22])))
-			if(cur < most_recent):
+			if((cur < most_recent) and (cur > 0)):
 				most_recent = cur
 				index = x
 		interest_info_dict[i]['link']   = d['entries'][index]['link']
