@@ -19,9 +19,7 @@ def get_users_from_DB():
 	                     passwd="dubaiguy$$",
 	                     db="Dubai")
 	cur = db.cursor()
-	cur.execute("SELECT * FROM USERS WHERE Name = 'jared.donohue@gmail.com'")
-	print(cur.fetchall)
-	return cur.fetchall
+	return cur
 
 def get_user_interests(uid):
 		cur.execute("""
@@ -32,7 +30,7 @@ def get_user_interests(uid):
 		""", (uid,))
 		return cur.fetchall()
 
-users = get_users_from_DB()
+users = get_users_from_DB().execute("SELECT * FROM USERS WHERE Name = 'jared.donohue@gmail.com'").fetchall
 
 for user in users:
 	uid  = user[0]
