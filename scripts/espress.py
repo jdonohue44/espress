@@ -28,21 +28,12 @@ def get_users_from_DB():
 	cur.fetchall()
 	return cur
 
-# def get_user_interests(uid):
-		# cur.execute("""
-		# SELECT INTERESTS.Interest FROM USER_INTERESTS
-		# INNER JOIN USERS ON USERS.ID = USER_INTERESTS.User_ID
-		# INNER JOIN INTERESTS ON INTERESTS.ID = USER_INTERESTS.Interest_ID
-		# where USERS.ID = %s;
-		# """, (uid,))
-		# return cur.fetchall()
-
 db = MySQLdb.connect(host="jd-db-instance.csuhsua8cx8a.us-east-1.rds.amazonaws.com",
                      user="jdonohue44",
                      passwd="dubaiguy$$",
                      db="Dubai")
 cur = db.cursor()
-cur.execute("SELECT * FROM USERS WHERE Name = 'jared.donohue@gmail.com'")
+cur.execute("SELECT * FROM USERS")
 users = cur.fetchall()
 
 for user in users:
