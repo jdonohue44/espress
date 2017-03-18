@@ -20,10 +20,8 @@ def get_users_from_DB():
 	                     db="Dubai")
 	cur = db.cursor()
 	cur.execute("SELECT * FROM USERS WHERE Name = 'jared.donohue@gmail.com'")
-	rows = cur.fetchall
-	for r in rows:
-		print(r[0])
-	return rows
+	cur.fetchall()
+	return cur
 
 def get_user_interests(uid):
 		cur.execute("""
