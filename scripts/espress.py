@@ -23,7 +23,7 @@ def get_users_from_DB():
 	cur.fetchall()
 	return cur
 
-def get_user_interests(uid):
+# def get_user_interests(uid):
 		# cur.execute("""
 		# SELECT INTERESTS.Interest FROM USER_INTERESTS
 		# INNER JOIN USERS ON USERS.ID = USER_INTERESTS.User_ID
