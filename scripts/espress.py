@@ -21,7 +21,7 @@ def get_users_from_DB():
 	# cur = db.cursor()
 	# cur.execute("SELECT * FROM USERS")
 	# return cur.fetchall
-	return (1, "Jared", "jared.donohue@gmail.com")
+	return [[1, "Jared", "jared.donohue@gmail.com"]]
 
 def get_user_interests(uid):
 		# cur.execute("""
@@ -101,4 +101,4 @@ for user in users:
 	#    print("Error: unable to send email")
 	#    log_file.write("ERROR sending email to" + dest + " -- " + time.strftime("%m-%d-%Y %H:%M") + "\n")
 
-db.close()
+# db.close()
