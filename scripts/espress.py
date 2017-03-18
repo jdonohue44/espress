@@ -7,6 +7,8 @@ import time
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
+source = 'espressmorningnews@gmail.com'
+
 def create_dict(interests):
 	dict = {}
 	for i in interests:
@@ -87,7 +89,7 @@ for user in users:
 
 	# Mail Service
 	message = MIMEMultipart()
-	message['From'] = 'espressmorningnews@gmail.com'
+	message['From'] = source
 	message['To'] = dest
 	message['Subject'] = 'Your Espress Newsletter'
 
@@ -111,7 +113,7 @@ for user in users:
 	smtp_server.login(source, '5638JabroniStreet**')
 
 	try:
-	   smtp_server.sendmail('espressmorningnews@gmail.com', dest, message.as_string())
+	   smtp_server.sendmail(source, dest, message.as_string())
 	   smtp_server.quit()
 	   log_file.write("Successfully sent email -- " + time.strftime("%m-%d-%Y %H:%M") + "\n")
 	except smtplib.SMTPException:
