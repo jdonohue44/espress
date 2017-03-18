@@ -41,7 +41,7 @@ for user in users:
 	dest = user[2]
 	# interests = []
 	# interest_rows = get_user_interests(uid)
-	interests = ["Spotify", "Bill Withers", "Coffee", "March Madness", "Boston"]
+	interests = ["March Madness"]
 
 	# get the interest name (interest[0])
 	# for interest in interest_rows:
