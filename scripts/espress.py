@@ -56,6 +56,10 @@ for user in users:
 		query += words[len(words)-1]
 		interest_info_dict[i]['query'] = query
 
+
+	# NEW FEATURE: suggested articles?
+	# NEW FEATURE: top stories?
+
 	# Put news info into interest information dictionary
 	# time.strftime directives:
 	# %m = month(01,12) %d = day(01,31) %H = hour(00,23) %M = minute(00,59)
@@ -63,6 +67,11 @@ for user in users:
 		d = feedparser.parse(
 			'https://news.google.com/news?cf=all&hl=en&pz=1&ned=us&q='+
 			 interest_info_dict[i]['query'] + '&output=rss')
+
+
+	    # NEW FEATURE: check if query is in the article title?
+
+		# rank articles by most recently published
 		now = int(time.strftime("%m%d%H%M"))
 		most_recent = (now - (
 					  int(month_to_decimal_map[d['entries'][0]['published'][8:11]] +
@@ -79,6 +88,8 @@ for user in users:
 			if((cur < most_recent) and (cur > 0)):
 				most_recent = cur
 				index = x
+
+		# Use the most recent article, and get remaining information needed.
 		interest_info_dict[i]['link']   = d['entries'][index]['link']
 		interest_info_dict[i]['date']   = d['entries'][index]['published'][:-13]
 		interest_info_dict[i]['source'] = d['entries'][index]['title'].split("-")[-1]
