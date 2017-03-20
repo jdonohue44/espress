@@ -23,7 +23,7 @@ db = MySQLdb.connect(host="jd-db-instance.csuhsua8cx8a.us-east-1.rds.amazonaws.c
                      passwd="dubaiguy$$",
                      db="Dubai")
 cur = db.cursor()
-cur.execute("SELECT * FROM USERS;")
+cur.execute("SELECT * FROM USERS where Name = 'jared.donohue@gmail.com'")
 users = cur.fetchall()
 
 for user in users:
