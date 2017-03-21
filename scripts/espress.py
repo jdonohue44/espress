@@ -7,6 +7,7 @@ import time
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
+log_file = open('/home/ec2-user/espress/logs.log','a')
 source = 'espressmorningnews@gmail.com'
 month_to_decimal_map = {'Jan':'01', 'Feb':'02', 'Mar':'03', 'Apr':'04',
 						'May':'05', 'Jun':'06', 'Jul':'07', 'Aug':'08',
@@ -18,13 +19,17 @@ def create_dict(interests):
 		dict[i] = {}
 	return dict
 
-db = MySQLdb.connect(host="jd-db-instance.csuhsua8cx8a.us-east-1.rds.amazonaws.com",
-                     user="jdonohue44",
-                     passwd="dubaiguy$$",
-                     db="Dubai")
-cur = db.cursor()
-cur.execute("SELECT * FROM USERS where Name = 'jared.donohue@gmail.com'")
-users = cur.fetchall()
+try:
+	db = MySQLdb.connect(host="jd-db-instance.csuhsua8cx8a.us-east-1.rds.amazonaws.com",
+	                     user="jdonohue44",
+	                     passwd="dubaiguy$$",
+	                     db="Dubai")
+	cur = db.cursor()
+	cur.execute("SELECT * FROM USERS")
+	users = cur.fetchall()
+except Exception:
+	print("ERROR connecting to DB")
+	log_file.write("ERROR connecting to DB\n")
 
 for user in users:
 	uid  = user[0]
@@ -103,7 +108,6 @@ for user in users:
 
 	f1 = open('/home/ec2-user/espress/html/template1.html','r')
 	f2 = open('/home/ec2-user/espress/html/template2.html','r')
-	log_file = open('/home/ec2-user/espress/logs.log','a')
 
 	html = f1.read()
 	for i in interest_info_dict:
