@@ -27,7 +27,7 @@ try:
 	                     passwd="dubaiguy$$",
 	                     db="Dubai")
 	cur = db.cursor()
-	cur.execute("SELECT * FROM USERS")
+	cur.execute("SELECT * FROM USERS WHERE ID = 11")
 	users = cur.fetchall()
 except Exception:
 	print("ERROR connecting to DB")
