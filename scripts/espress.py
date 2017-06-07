@@ -74,7 +74,7 @@ for user in users:
 	for interest in interest_info_dict:
 		d = feedparser.parse(
 			'https://news.google.com/news?cf=all&hl=en&pz=1&ned=us&q='+
-			 get_query(interest_info_dict[interest]) + '&output=rss')
+			 get_query(interest) + '&output=rss')
 
 		# rank articles by most recently published
 		# for 0:interest_info_dict[interest][num_articles]
