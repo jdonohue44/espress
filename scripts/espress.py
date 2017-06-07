@@ -16,9 +16,8 @@ month_to_decimal_map = {'Jan':'01', 'Feb':'02', 'Mar':'03', 'Apr':'04',
 def create_dict(interests):
 	dict = {}
 	for interest in interests:
-		# dict[interest] = []
-		# dict[interest].append({})
-		dict[interest] = {}
+		dict[interest] = []
+		dict[interest].append({})
 	return dict
 
 try:
@@ -38,9 +37,10 @@ for user in users:
 	name = user[1]
 	dest = user[2]
 	interests = []
+	num_articles = []
 
 	cur.execute("""
-	SELECT INTERESTS.Interest FROM USER_INTERESTS
+	SELECT INTERESTS.Interest, USER_INTERESTS.Num_Articles FROM USER_INTERESTS
 	INNER JOIN USERS ON USERS.ID = USER_INTERESTS.User_ID
 	INNER JOIN INTERESTS ON INTERESTS.ID = USER_INTERESTS.Interest_ID
 	where USERS.ID = %s;
@@ -50,9 +50,13 @@ for user in users:
 	# get the interest name (interest[0])
 	for interest in interest_rows:
 		interests.append(interest[0])
+		num_articles.append(interest[1])
 
-	# create interest information dictionary --> {'interest':{'query':'','title':'','link':'','date':''}}
-	# 										 --> {'interest':[{'query':'','title':'','link':'','date':''}]}
+	print(interests)
+	print(num_articles)
+
+	# create interest information dictionary --> {'interest':{'num_articles' : 3, }[{'query':'','title':'','link':'','date':''}]}
+	# {'interest' : [{'query' : 'abc', 'title' : 'def', 'link' : 'https', 'date' : 'Mon 27'}] }
 	interest_info_dict = create_dict(interests)
 
 	# Put Queries into interest information dictionary
@@ -75,6 +79,8 @@ for user in users:
 			 interest_info_dict[interest]['query'] + '&output=rss')
 
 		# rank articles by most recently published
+		# for 0:interest_info_dict[interest][num_articles]
+		# get num_articles recent articles
 		now = int(time.strftime("%m%d%H%M"))
 		most_recent = (now - (
 					  int(month_to_decimal_map[d['entries'][0]['published'][8:11]] +
@@ -93,6 +99,7 @@ for user in users:
 				index = x
 
 		# Use the most recent article, and get remaining information needed.
+		# for x in range(0,len(interest_info_dict[interest][num_articles]))
 		interest_info_dict[interest]['link']   = d['entries'][index]['link']
 		interest_info_dict[interest]['date']   = d['entries'][index]['published'][:-13]
 		interest_info_dict[interest]['source'] = d['entries'][index]['title'].split("-")[-1]
