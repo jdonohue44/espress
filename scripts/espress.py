@@ -13,12 +13,23 @@ month_to_decimal_map = {'Jan':'01', 'Feb':'02', 'Mar':'03', 'Apr':'04',
 						'May':'05', 'Jun':'06', 'Jul':'07', 'Aug':'08',
 						'Sep':'09', 'Oct':'10', 'Nov':'11', 'Dec':'12'}
 
-def create_dict(interests):
+def create_dict(interests, num_articles):
 	dict = {}
+	index = 0
 	for interest in interests:
 		dict[interest] = []
-		dict[interest].append({})
+		for i in range(num_articles[index]):
+			dict[interest].append({})
+		index += 1
 	return dict
+
+def get_query(interest):
+	query = ''
+	words = interest.lower().split()
+	for num in range(0,len(words)-1):
+		query += words[num] + "+"
+	query += words[len(words)-1]
+	return query
 
 try:
 	db = MySQLdb.connect(host="jd-db-instance.csuhsua8cx8a.us-east-1.rds.amazonaws.com",
@@ -52,22 +63,9 @@ for user in users:
 		interests.append(interest[0])
 		num_articles.append(int(interest[1]))
 
-	print(interests)
-	print(num_articles)
-
 	# create interest information dictionary --> {'interest':{'num_articles' : 3, }[{'query':'','title':'','link':'','date':''}]}
 	# {'interest' : [{'query' : 'abc', 'title' : 'def', 'link' : 'https', 'date' : 'Mon 27'}] }
-	interest_info_dict = create_dict(interests)
-
-	# Put Queries into interest information dictionary
-	# len(d['entries']) = number of articles
-	for interest in interest_info_dict:
-		query = ''
-		words = interest.lower().split()
-		for num in range(0,len(words)-1):
-			query += words[num] + "+"
-		query += words[len(words)-1]
-		interest_info_dict[interest]['query'] = query
+	interest_info_dict = create_dict(interests, num_articles)
 
 	# Put news info into interest information dictionary
 	# time.strftime directives:
@@ -76,7 +74,7 @@ for user in users:
 	for interest in interest_info_dict:
 		d = feedparser.parse(
 			'https://news.google.com/news?cf=all&hl=en&pz=1&ned=us&q='+
-			 interest_info_dict[interest]['query'] + '&output=rss')
+			 get_query(interest_info_dict[interest]) + '&output=rss')
 
 		# rank articles by most recently published
 		# for 0:interest_info_dict[interest][num_articles]
@@ -100,10 +98,10 @@ for user in users:
 
 		# Use the most recent article, and get remaining information needed.
 		# for x in range(0,len(interest_info_dict[interest][num_articles]))
-		interest_info_dict[interest]['link']   = d['entries'][index]['link']
-		interest_info_dict[interest]['date']   = d['entries'][index]['published'][:-13]
-		interest_info_dict[interest]['source'] = d['entries'][index]['title'].split("-")[-1]
-		interest_info_dict[interest]['title']  = d['entries'][index]['title'][:-(len(interest_info_dict[interest]['source'])+2)]
+		interest_info_dict[interest][0]['link']   = d['entries'][index]['link']
+		interest_info_dict[interest][0]['date']   = d['entries'][index]['published'][:-13]
+		interest_info_dict[interest][0]['source'] = d['entries'][index]['title'].split("-")[-1]
+		interest_info_dict[interest][0]['title']  = d['entries'][index]['title'][:-(len(interest_info_dict[interest]['source'])+2)]
 
 	# Mail Service
 	message = MIMEMultipart()
