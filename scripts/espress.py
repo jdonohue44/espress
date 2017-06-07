@@ -50,7 +50,7 @@ for user in users:
 	# get the interest name (interest[0])
 	for interest in interest_rows:
 		interests.append(interest[0])
-		num_articles.append(interest[1])
+		num_articles.append(int(interest[1]))
 
 	print(interests)
 	print(num_articles)
