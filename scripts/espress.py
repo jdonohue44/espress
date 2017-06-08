@@ -64,7 +64,7 @@ for user in users:
 		num_articles.append(int(interest[1]))
 
 	# create interest information dictionary --> {'interest':{'num_articles' : 3, }[{'query':'','title':'','link':'','date':''}]}
-	# {'interest' : [{'query' : 'abc', 'title' : 'def', 'link' : 'https', 'date' : 'Mon 27'}] }
+	# {'interest' : [{}, {}, {}] }
 	interest_info_dict = create_dict(interests, num_articles)
 
 	# Put news info into interest information dictionary
@@ -79,29 +79,27 @@ for user in users:
 		# rank articles by most recently published
 		# for 0:interest_info_dict[interest][num_articles]
 		# get num_articles recent articles
-		now = int(time.strftime("%m%d%H%M"))
-		most_recent = (now - (
-					  int(month_to_decimal_map[d['entries'][0]['published'][8:11]] +
-					  d['entries'][0]['published'][5:7] +
-					  d['entries'][0]['published'][17:19] +
-					  d['entries'][0]['published'][20:22])))
-		index = 0
-		for x in range(1,len(d['entries'])):
-			cur = (now - (
-				  int(month_to_decimal_map[d['entries'][x]['published'][8:11]] +
-				  d['entries'][x]['published'][5:7] +
-				  d['entries'][x]['published'][17:19] +
-				  d['entries'][x]['published'][20:22])))
-			if((cur < most_recent) and (cur > 0)):
-				most_recent = cur
-				index = x
-
-		# Use the most recent article, and get remaining information needed.
-		# for x in range(0,len(interest_info_dict[interest][num_articles]))
-		interest_info_dict[interest][0]['link']   = d['entries'][index]['link']
-		interest_info_dict[interest][0]['date']   = d['entries'][index]['published'][:-13]
-		interest_info_dict[interest][0]['source'] = d['entries'][index]['title'].split("-")[-1]
-		interest_info_dict[interest][0]['title']  = d['entries'][index]['title'][:-(len(interest_info_dict[interest][0]['source'])+2)]
+		# now = int(time.strftime("%m%d%H%M"))
+		# most_recent = (now - (
+		# 			  int(month_to_decimal_map[d['entries'][0]['published'][8:11]] +
+		# 			  d['entries'][0]['published'][5:7] +
+		# 			  d['entries'][0]['published'][17:19] +
+		# 			  d['entries'][0]['published'][20:22])))
+		# index = 0
+		# for x in range(1,len(d['entries'])):
+		# 	cur = (now - (
+		# 		  int(month_to_decimal_map[d['entries'][x]['published'][8:11]] +
+		# 		  d['entries'][x]['published'][5:7] +
+		# 		  d['entries'][x]['published'][17:19] +
+		# 		  d['entries'][x]['published'][20:22])))
+		# 	if((cur < most_recent) and (cur > 0)):
+		# 		most_recent = cur
+		# 		index = x
+		for i in range(len(interest_info_dict[interest])):
+			interest_info_dict[interest][i]['link']   = d['entries'][i]['link']
+			interest_info_dict[interest][i]['date']   = d['entries'][i]['published'][:-13]
+			interest_info_dict[interest][i]['source'] = d['entries'][i]['title'].split("-")[-1]
+			interest_info_dict[interest][i]['title']  = d['entries'][i]['title'][:-(len(interest_info_dict[interest][i]['source'])+2)]
 
 	# Mail Service
 	message = MIMEMultipart()
