@@ -113,12 +113,13 @@ for user in users:
 	# build email by concatenating HTML and data from interest_info_dict
 	html = f1.read()
 	for interest in interest_info_dict:
-		html += "<tr><td style='padding: 20px;'>"
-		html += "<div style='text-align:center; padding: 10px;'><b style='font-weight: 100; font-size: 24px; font-family: sans-serif;'>" + interest_info_dict[interest][0]['title'] + "</b></div>"
-		html += "<p style='text-align: center; font-size: 11px; margin-top: 4px;'>Retrieved from " + interest_info_dict[interest][0]['source'] + " on " + interest_info_dict[interest][0]['date'] + ", based on your interest in <b>" + interest + "</b></p>"
-		html += "<div style='text-align:right;'><a style='padding:6px; font-size: 16px; text-decoration: underline; margin-right: 30px;' href ='" + interest_info_dict[interest][0]['link'] + "'>Read Article</a></div>"
-		html += "</td></tr>"
-	html += f2.read()
+		for i in range(len(interest_info_dict[interest])):
+			html += "<tr><td style='padding: 20px;'>"
+			html += "<div style='text-align:center; padding: 10px;'><b style='font-weight: 100; font-size: 24px; font-family: sans-serif;'>" + interest_info_dict[interest][i]['title'] + "</b></div>"
+			html += "<p style='text-align: center; font-size: 11px; margin-top: 4px;'>Retrieved from " + interest_info_dict[interest][i]['source'] + " on " + interest_info_dict[interest][i]['date'] + ", based on your interest in <b>" + interest + "</b></p>"
+			html += "<div style='text-align:right;'><a style='padding:6px; font-size: 16px; text-decoration: underline; margin-right: 30px;' href ='" + interest_info_dict[interest][i]['link'] + "'>Read Article</a></div>"
+			html += "</td></tr>"
+		html += f2.read()
 
 	message.attach(MIMEText(html.encode('utf-8'), 'html', 'utf-8'))
 
