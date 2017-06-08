@@ -119,7 +119,7 @@ for user in users:
 			html += "<p style='text-align: center; font-size: 11px; margin-top: 4px;'>Retrieved from " + interest_info_dict[interest][i]['source'] + " on " + interest_info_dict[interest][i]['date'] + ", based on your interest in <b>" + interest + "</b></p>"
 			html += "<div style='text-align:right;'><a style='padding:6px; font-size: 16px; text-decoration: underline; margin-right: 30px;' href ='" + interest_info_dict[interest][i]['link'] + "'>Read Article</a></div>"
 			html += "</td></tr>"
-			html += f2.read()
+	html += f2.read()
 
 	message.attach(MIMEText(html.encode('utf-8'), 'html', 'utf-8'))
 
