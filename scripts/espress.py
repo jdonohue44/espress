@@ -50,13 +50,17 @@ for user in users:
 	interests = []
 	num_articles = []
 
-	cur.execute("""
-	SELECT INTERESTS.Interest, USER_INTERESTS.Num_Articles FROM USER_INTERESTS
-	INNER JOIN USERS ON USERS.ID = USER_INTERESTS.User_ID
-	INNER JOIN INTERESTS ON INTERESTS.ID = USER_INTERESTS.Interest_ID
-	where USERS.ID = %s;
-	""", (uid,))
-	interest_rows = cur.fetchall()
+	try:
+		cur.execute("""
+		SELECT INTERESTS.Interest, USER_INTERESTS.Num_Articles FROM USER_INTERESTS
+		INNER JOIN USERS ON USERS.ID = USER_INTERESTS.User_ID
+		INNER JOIN INTERESTS ON INTERESTS.ID = USER_INTERESTS.Interest_ID
+		where USERS.ID = %s;
+		""", (uid,))
+		interest_rows = cur.fetchall()
+	except Exception:
+		print("ERROR getting user interests from DB.")
+		log_file.write("ERROR getting user interests from DB.\n")
 
 	# get the interest name (interest[0])
 	for interest in interest_rows:
@@ -72,9 +76,13 @@ for user in users:
 	# %m = month(01,12) %d = day(01,31) %H = hour(00,23) %M = minute(00,59)
 	# type(d) = feedparser.FeedParserDict (dictionary storing RSS feed info)
 	for interest in interest_info_dict:
-		d = feedparser.parse(
-			'https://news.google.com/news?cf=all&hl=en&pz=1&ned=us&q='+
-			 get_query(interest) + '&output=rss')
+		try:
+			d = feedparser.parse(
+				'https://news.google.com/news?cf=all&hl=en&pz=1&ned=us&q='+
+			 	get_query(interest) + '&output=rss')
+		except Exception:
+			print("ERROR parsing (feedparser.parse) google news RSS.")
+			log_file.write("ERROR parsing (feedparser.parse) google news RSS.\n")
 
 		# rank articles by most recently published
 		# for 0:interest_info_dict[interest][num_articles]
@@ -95,13 +103,14 @@ for user in users:
 		# 	if((cur < most_recent) and (cur > 0)):
 		# 		most_recent = cur
 		# 		index = x
+
 		for i in range(len(interest_info_dict[interest])):
 			interest_info_dict[interest][i]['link']   = d['entries'][i]['link']
 			interest_info_dict[interest][i]['date']   = d['entries'][i]['published'][:-13]
 			interest_info_dict[interest][i]['source'] = d['entries'][i]['title'].split("-")[-1]
 			interest_info_dict[interest][i]['title']  = d['entries'][i]['title'][:-(len(interest_info_dict[interest][i]['source'])+2)]
 
-	# Mail Service
+	# Mail Service info
 	message = MIMEMultipart()
 	message['From'] = source
 	message['To'] = dest
@@ -123,12 +132,16 @@ for user in users:
 
 	message.attach(MIMEText(html.encode('utf-8'), 'html', 'utf-8'))
 
-	# email account info
-	smtp_server = smtplib.SMTP('smtp.gmail.com', 587)
-	smtp_server.starttls()
-	smtp_server.login(source, '5638JabroniStreet**')
+	# login to email account
+	try:
+		smtp_server = smtplib.SMTP('smtp.gmail.com', 587)
+		smtp_server.starttls()
+		smtp_server.login(source, '5638JabroniStreet**')
+	except Exception:
+		print("ERROR connecting to email server")
+ 		log_file.write("ERROR connecting to email server\n")
 
-	# send the email
+	# send email
 	try:
 	   smtp_server.sendmail(source, dest, message.as_string())
 	   smtp_server.quit()
