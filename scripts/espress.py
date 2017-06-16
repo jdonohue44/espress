@@ -37,7 +37,7 @@ try:
 	                     passwd="dubaiguy$$",
 	                     db="Dubai")
 	cur = db.cursor()
-	cur.execute("SELECT * FROM USERS WHERE ID = 11")
+	cur.execute("SELECT * FROM USERS")
 	users = cur.fetchall()
 except Exception:
 	print("ERROR connecting to DB")
@@ -58,8 +58,6 @@ for user in users:
 		where USERS.ID = %s;
 		""", (uid,))
 		interest_rows = cur.fetchall()
-		for i in interest_rows:
-			print(i)
 	except Exception:
 		print("ERROR getting user interests from DB.")
 		log_file.write("ERROR getting user interests from DB.\n")
