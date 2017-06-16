@@ -58,6 +58,8 @@ for user in users:
 		where USERS.ID = %s;
 		""", (uid,))
 		interest_rows = cur.fetchall()
+		for i in interest_rows:
+			print(i)
 	except Exception:
 		print("ERROR getting user interests from DB.")
 		log_file.write("ERROR getting user interests from DB.\n")
