@@ -32,40 +32,22 @@ def get_query(interest):
 	return query
 
 try:
-	db = MySQLdb.connect(host="jd-db-instance.csuhsua8cx8a.us-east-1.rds.amazonaws.com",
+	db = MySQLdb.connect(host="dubai.csuhsua8cx8a.us-east-1.rds.amazonaws.com",
 	                     user="jdonohue44",
 	                     passwd="dubaiguy$$",
-	                     db="Dubai")
+	                     db="Espresso")
 	cur = db.cursor()
-	cur.execute("SELECT * FROM USERS")
+	cur.execute("SELECT * FROM Customer")
 	users = cur.fetchall()
 except Exception:
 	print("ERROR connecting to DB")
 	log_file.write("ERROR connecting to DB\n")
 
 for user in users:
-	uid  = user[0]
-	name = user[1]
-	dest = user[2]
-	interests = []
-	num_articles = []
-
-	try:
-		cur.execute("""
-		SELECT INTERESTS.Interest, USER_INTERESTS.Num_Articles FROM USER_INTERESTS
-		INNER JOIN USERS ON USERS.ID = USER_INTERESTS.User_ID
-		INNER JOIN INTERESTS ON INTERESTS.ID = USER_INTERESTS.Interest_ID
-		where USERS.ID = %s;
-		""", (uid,))
-		interest_rows = cur.fetchall()
-	except Exception:
-		print("ERROR getting user interests from DB.")
-		log_file.write("ERROR getting user interests from DB.\n")
-
-	# get the interest name (interest[0])
-	for interest in interest_rows:
-		interests.append(interest[0])
-		num_articles.append(int(interest[1]))
+	dest  = user[0]
+	interests = user[1]
+	name = user[2]
+	num_articles = 1
 
 	# create interest information dictionary --> {'interest':{'num_articles' : 3, }[{'query':'','title':'','link':'','date':''}]}
 	# {'interest' : [{}, {}, {}] }
@@ -139,7 +121,7 @@ for user in users:
 		smtp_server.login(source, '5638JabroniStreet**')
 	except Exception:
 		print("ERROR connecting to email server")
- 		log_file.write("ERROR connecting to email server\n")
+		log_file.write("ERROR connecting to email server\n")
 
 	# send email
 	try:
