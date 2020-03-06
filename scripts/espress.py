@@ -1,4 +1,5 @@
-import MySQLdb
+import mysql.connector
+from mysql.connector import Error
 import feedparser
 import requests
 import json
@@ -7,7 +8,7 @@ import time
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
-log_file = open('/home/ec2-user/espress/logs.log','a')
+# log_file = open('/home/ec2-user/espress/logs.log','a')
 source = 'espressmorningnews@gmail.com'
 month_to_decimal_map = {'Jan':'01', 'Feb':'02', 'Mar':'03', 'Apr':'04',
 						'May':'05', 'Jun':'06', 'Jul':'07', 'Aug':'08',
@@ -32,22 +33,32 @@ def get_query(interest):
 	return query
 
 try:
-	db = MySQLdb.connect(host="dubai.csuhsua8cx8a.us-east-1.rds.amazonaws.com",
-	                     user="jdonohue44",
-	                     passwd="dubaiguy$$",
-	                     db="Espresso")
-	cur = db.cursor()
-	cur.execute("SELECT * FROM Customer")
-	users = cur.fetchall()
-except Exception:
-	print("ERROR connecting to DB")
-	log_file.write("ERROR connecting to DB\n")
+	connection = mysql.connector.connect(host='dubai.csuhsua8cx8a.us-east-1.rds.amazonaws.com',
+                                         database='Espresso',
+                                         user='jdonohue44',
+                                         password='dubaiguy$$')
+	if connection.is_connected():
+        db_Info = connection.get_server_info()
+        print("Connected to MySQL Server version ", db_Info)
+        cursor = connection.cursor()
+        cursor.execute("select * from Customer;")
+        customers = cursor.fetchall()
+        print("Customers: ", customers)
+
+except Error as e:
+    print("Error while connecting to MySQL", e)
+finally:
+    if (connection.is_connected()):
+        cursor.close()
+        connection.close()
+        print("MySQL connection is closed")
+
 
 for user in users:
-	dest  = user[0]
-	interests = user[1]
-	name = user[2]
-	num_articles = 1
+	# dest  = user[0]
+	# interests = user[1]
+	# name = user[2]
+	# num_articles = 3
 
 	# create interest information dictionary --> {'interest':{'num_articles' : 3, }[{'query':'','title':'','link':'','date':''}]}
 	# {'interest' : [{}, {}, {}] }
@@ -64,7 +75,7 @@ for user in users:
 			 	get_query(interest) + '&output=rss')
 		except Exception:
 			print("ERROR parsing (feedparser.parse) google news RSS.")
-			log_file.write("ERROR parsing (feedparser.parse) google news RSS.\n")
+			# log_file.write("ERROR parsing (feedparser.parse) google news RSS.\n")
 
 		# rank articles by most recently published
 		# for 0:interest_info_dict[interest][num_articles]
@@ -121,15 +132,15 @@ for user in users:
 		smtp_server.login(source, '5638JabroniStreet**')
 	except Exception:
 		print("ERROR connecting to email server")
-		log_file.write("ERROR connecting to email server\n")
+		# log_file.write("ERROR connecting to email server\n")
 
 	# send email
 	try:
 	   smtp_server.sendmail(source, dest, message.as_string())
 	   smtp_server.quit()
-	   log_file.write("Successfully sent email -- " + time.strftime("%m-%d-%Y %H:%M") + "\n")
+	   # log_file.write("Successfully sent email -- " + time.strftime("%m-%d-%Y %H:%M") + "\n")
 	except smtplib.SMTPException:
 	   print("Error: unable to send email")
-	   log_file.write("ERROR sending email to" + dest + " -- " + time.strftime("%m-%d-%Y %H:%M") + "\n")
+	   # log_file.write("ERROR sending email to" + dest + " -- " + time.strftime("%m-%d-%Y %H:%M") + "\n")
 
 db.close()
