@@ -38,12 +38,12 @@ try:
                                          user='jdonohue44',
                                          password='dubaiguy$$')
 	if connection.is_connected():
-        db_Info = connection.get_server_info()
-        print("Connected to MySQL Server version ", db_Info)
-        cursor = connection.cursor()
-        cursor.execute("select * from Customer;")
-        customers = cursor.fetchall()
-        print("Customers: ", customers)
+	    db_Info = connection.get_server_info()
+	    print("Connected to MySQL Server version ", db_Info)
+	    cursor = connection.cursor()
+	    cursor.execute("select * from Customer;")
+	    customers = cursor.fetchall()
+	    print("Customers: ", customers)
 
 except Error as e:
     print("Error while connecting to MySQL", e)
@@ -53,6 +53,7 @@ finally:
         connection.close()
         print("MySQL connection is closed")
 
+users = []
 
 for user in users:
 	# dest  = user[0]
