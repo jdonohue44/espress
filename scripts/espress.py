@@ -8,7 +8,7 @@ import time
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
-# log_file = open('/home/ec2-user/espresso/logs.log','a')
+# log_file = open('/home/ec2-user/Projects/espress/logs.log','a')
 source = 'espressmorningnews@gmail.com'
 customers = []
 
@@ -55,7 +55,6 @@ for customer in customers:
 	article_info_dict = {}
 	for interest in interests_dict:
 		num_articles = interests_dict[interest]
-		# {"dogs": [{"title":"", "date":"", "link":""}, {}]}
 		article_info_dict[interest] = []
 
 		try:
@@ -87,8 +86,8 @@ for customer in customers:
 	message['To'] = dest
 	message['Subject'] = 'Today\'s Espresso Newsletter'
 
-	f1 = open('/Users/jareddonohue/AWS/espress/html/template1.html','r')
-	f2 = open('/Users/jareddonohue/AWS/espress/html/template2.html','r')
+	f1 = open('/home/ec2-user/Projects/espress/html/template1.html','r')
+	f2 = open('/home/ec2-user/Projects/espress/html/template2.html','r')
 
 	# build email by concatenating HTML and data from interest_info_dict
 	html = f1.read()
