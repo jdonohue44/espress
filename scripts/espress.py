@@ -8,13 +8,11 @@ import time
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
-# log_file = open('/home/ec2-user/espress/logs.log','a')
+# log_file = open('/home/ec2-user/espresso/logs.log','a')
 source = 'espressmorningnews@gmail.com'
-month_to_decimal_map = {'Jan':'01', 'Feb':'02', 'Mar':'03', 'Apr':'04',
-						'May':'05', 'Jun':'06', 'Jul':'07', 'Aug':'08',
-						'Sep':'09', 'Oct':'10', 'Nov':'11', 'Dec':'12'}
+customers = []
 
-def create_dict(interests, num_articles):
+def create_article_info_dict(interests, num_articles):
 	dict = {}
 	index = 0
 	for interest in interests:
@@ -38,8 +36,6 @@ try:
                                          user='jdonohue44',
                                          password='dubaiguy$$')
 	if connection.is_connected():
-	    db_Info = connection.get_server_info()
-	    print("Connected to MySQL Server version ", db_Info)
 	    cursor = connection.cursor()
 	    cursor.execute("select * from Customer;")
 	    customers = cursor.fetchall()
@@ -53,74 +49,55 @@ finally:
         connection.close()
         print("MySQL connection is closed")
 
-users = []
+for customer in customers:
+	interests_dict = json.loads(customer[1])
+	# for each interest we need to store num_articles articles info
+	article_info_dict = {}
+	for interest in interests_dict:
+		num_articles = interests_dict[interest]
+		# {"dogs": [{"title":"", "date":"", "link":""}, {}]}
+		article_info_dict[interest] = []
 
-for user in users:
-	# dest  = user[0]
-	# interests = user[1]
-	# name = user[2]
-	# num_articles = 3
-
-	# create interest information dictionary --> {'interest':{'num_articles' : 3, }[{'query':'','title':'','link':'','date':''}]}
-	# {'interest' : [{}, {}, {}] }
-	interest_info_dict = create_dict(interests, num_articles)
-
-	# Put news info into interest information dictionary
-	# time.strftime directives:
-	# %m = month(01,12) %d = day(01,31) %H = hour(00,23) %M = minute(00,59)
-	# type(d) = feedparser.FeedParserDict (dictionary storing RSS feed info)
-	for interest in interest_info_dict:
 		try:
-			d = feedparser.parse(
+			# get some news based on interests
+			print("retrieving news on", interest, "for", customer[0])
+			rss_data = feedparser.parse(
 				'https://news.google.com/news?cf=all&hl=en&pz=1&ned=us&q='+
 			 	get_query(interest) + '&output=rss')
 		except Exception:
-			print("ERROR parsing (feedparser.parse) google news RSS.")
+			print("ERROR parsing google news RSS.", Exception)
 			# log_file.write("ERROR parsing (feedparser.parse) google news RSS.\n")
 
-		# rank articles by most recently published
-		# for 0:interest_info_dict[interest][num_articles]
-		# get num_articles recent articles
-		# now = int(time.strftime("%m%d%H%M"))
-		# most_recent = (now - (
-		# 			  int(month_to_decimal_map[d['entries'][0]['published'][8:11]] +
-		# 			  d['entries'][0]['published'][5:7] +
-		# 			  d['entries'][0]['published'][17:19] +
-		# 			  d['entries'][0]['published'][20:22])))
-		# index = 0
-		# for x in range(1,len(d['entries'])):
-		# 	cur = (now - (
-		# 		  int(month_to_decimal_map[d['entries'][x]['published'][8:11]] +
-		# 		  d['entries'][x]['published'][5:7] +
-		# 		  d['entries'][x]['published'][17:19] +
-		# 		  d['entries'][x]['published'][20:22])))
-		# 	if((cur < most_recent) and (cur > 0)):
-		# 		most_recent = cur
-		# 		index = x
+		# need source, title, date, link, interest
+		entries = rss_data['entries']
+		article_info = {}
+		for i in range(num_articles):
+			article_info['link']   = entries[i]['link']
+			article_info['date']   = entries[i]['published'][:-13]
+			article_info['source'] = entries[i]['title'].split("-")[-1]
+			article_info['title']  = entries[i]['title'][:-(len(article_info['source'])+2)]
+			article_info_dict[interest].append(article_info)
+			article_info = {}
 
-		for i in range(len(interest_info_dict[interest])):
-			interest_info_dict[interest][i]['link']   = d['entries'][i]['link']
-			interest_info_dict[interest][i]['date']   = d['entries'][i]['published'][:-13]
-			interest_info_dict[interest][i]['source'] = d['entries'][i]['title'].split("-")[-1]
-			interest_info_dict[interest][i]['title']  = d['entries'][i]['title'][:-(len(interest_info_dict[interest][i]['source'])+2)]
-
+	print("preparing articles:", article_info_dict)
 	# Mail Service info
+	dest = customer[0] # email address for this customer
 	message = MIMEMultipart()
 	message['From'] = source
 	message['To'] = dest
-	message['Subject'] = 'Your Espress Newsletter'
+	message['Subject'] = 'Today\'s Espresso Newsletter'
 
-	f1 = open('/home/ec2-user/espress/html/template1.html','r')
-	f2 = open('/home/ec2-user/espress/html/template2.html','r')
+	f1 = open('/Users/jareddonohue/AWS/espress/html/template1.html','r')
+	f2 = open('/Users/jareddonohue/AWS/espress/html/template2.html','r')
 
 	# build email by concatenating HTML and data from interest_info_dict
 	html = f1.read()
-	for interest in interest_info_dict:
-		for i in range(len(interest_info_dict[interest])):
+	for interest in article_info_dict:
+		for i in range(len(article_info_dict[interest])):
 			html += "<tr><td style='padding: 20px;'>"
-			html += "<div style='text-align:center; padding: 10px;'><b style='font-weight: 100; font-size: 24px; font-family: sans-serif;'>" + interest_info_dict[interest][i]['title'] + "</b></div>"
-			html += "<p style='text-align: center; font-size: 11px; margin-top: 4px;'>Retrieved from " + interest_info_dict[interest][i]['source'] + " on " + interest_info_dict[interest][i]['date'] + ", based on your interest in <b>" + interest + "</b></p>"
-			html += "<div style='text-align:right;'><a style='padding:6px; font-size: 16px; text-decoration: underline; margin-right: 30px;' href ='" + interest_info_dict[interest][i]['link'] + "'>Read Article</a></div>"
+			html += "<div style='text-align:center; padding: 10px;'><b style='font-weight: 100; font-size: 24px; font-family: sans-serif;'>" + article_info_dict[interest][i]['title'] + "</b></div>"
+			html += "<p style='text-align: center; font-size: 11px; margin-top: 4px;'>Retrieved from " + article_info_dict[interest][i]['source'] + " on " + article_info_dict[interest][i]['date'] + ", based on your interest in <b>" + interest + "</b></p>"
+			html += "<div style='text-align:right;'><a style='padding:6px; font-size: 16px; text-decoration: underline; margin-right: 30px;' href ='" + article_info_dict[interest][i]['link'] + "'>Read Article</a></div>"
 			html += "</td></tr>"
 	html += f2.read()
 
@@ -128,20 +105,19 @@ for user in users:
 
 	# login to email account
 	try:
-		smtp_server = smtplib.SMTP('smtp.gmail.com', 587)
+		smtp_server = smtplib.SMTP('smtp.gmail.com', 587, None, 30)
 		smtp_server.starttls()
 		smtp_server.login(source, '5638JabroniStreet**')
-	except Exception:
-		print("ERROR connecting to email server")
+	except Exception as e:
+		print("ERROR connecting to email server", str(e))
 		# log_file.write("ERROR connecting to email server\n")
 
 	# send email
 	try:
 	   smtp_server.sendmail(source, dest, message.as_string())
 	   smtp_server.quit()
+	   print("Successfully sent email to", dest)
 	   # log_file.write("Successfully sent email -- " + time.strftime("%m-%d-%Y %H:%M") + "\n")
 	except smtplib.SMTPException:
 	   print("Error: unable to send email")
 	   # log_file.write("ERROR sending email to" + dest + " -- " + time.strftime("%m-%d-%Y %H:%M") + "\n")
-
-db.close()
